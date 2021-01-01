@@ -32,8 +32,8 @@
 
 
 // Pins
-const int TRIG_PIN = 7;
-const int ECHO_PIN = 8;
+const int TRIG_PIN = 30;
+const int ECHO_PIN = 31;
 
 // Anything over 400 cm (23200 us pulse) is "out of range"
 const unsigned int MAX_DIST = 23200;
@@ -68,13 +68,14 @@ void loop()
 {
 
   if (millis() > publisher_timer) {
+  nh.loginfo("publish start");
 
   unsigned long t1;
   unsigned long t2;
   unsigned long pulse_width;
   float cm;
   float inches;
-
+  
   // Hold the trigger pin high for at least 10 us
   digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
@@ -87,6 +88,7 @@ void loop()
   // Note: the micros() counter will overflow after ~70 min
   t1 = micros();
   while ( digitalRead(ECHO_PIN) == 1);
+  
   t2 = micros();
   pulse_width = t2 - t1;
 
@@ -105,8 +107,10 @@ void loop()
   sonar_msg.data = sensorReading;
   pub_sonar.publish(&sonar_msg);
 
+  
+  
   publisher_timer = millis() + 4000; //publish once a second
-
+  nh.loginfo("publish end");
   }
 
   nh.spinOnce();
