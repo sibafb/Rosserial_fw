@@ -47,6 +47,8 @@ static float sensorReading =0;
 
 char unit = 'c'; // 'i' for inches , 'c' for centimeters
 
+char message[40];
+
 void setup()
 {
   // The Trigger pin will tell the sensor to range find
@@ -69,7 +71,9 @@ void loop()
 
   if (millis() > publisher_timer) {
   nh.loginfo("publish start");
-
+  
+  unsigned long timemill = millis();
+  
   unsigned long t1;
   unsigned long t2;
   unsigned long pulse_width;
@@ -110,6 +114,9 @@ void loop()
   
   
   publisher_timer = millis() + 4000; //publish once a second
+  sprintf(message,"time :%d",timemill - millis());
+  
+  nh.loginfo(message);
   nh.loginfo("publish end");
   }
 
