@@ -43,14 +43,9 @@ std_msgs::Float32 sonar_msg;
 ros::Publisher pub_sonar("sonar", &sonar_msg);
 ros::NodeHandle nh;
 
-#define CommandRegister 0x00
-int New_Address = 248; //0xF8
-#define ResultRegister  0x02
+static float sensorReading =0;
 
-float sensorReading =0;
-
-char unit = 'i'; // 'i' for inches , 'c' for centimeters
-
+char unit = 'c'; // 'i' for inches , 'c' for centimeters
 
 void setup()
 {
@@ -61,9 +56,6 @@ void setup()
   //Set Echo pin as input to measure the duration of 
   //pulses coming back from the distance sensor
   pinMode(ECHO_PIN, INPUT);
-
-  // We'll use the serial monitor to view the sensor output
-  Serial.begin(9600);
 
   nh.initNode();
   nh.advertise(pub_sonar);
